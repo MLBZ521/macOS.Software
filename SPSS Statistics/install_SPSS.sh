@@ -3,7 +3,7 @@
 ###################################################################################################
 # Script Name:  install_SPSS.sh
 # By:  Zack Thompson / Created:  11/1/2017
-# Version:  1.3.1 / Updated:  4/2/2018 / By:  ZT
+# Version:  1.4.0 / Updated:  4/2/2018 / By:  ZT
 #
 # Description:  This script silently installs SPSS.
 #
@@ -25,10 +25,13 @@ echo "*****  Install SPSS process:  START  *****"
 ##################################################
 # Bits staged...
 
-if [[ -d $(/usr/bin/find "/Library/Java/JavaVirtualMachines" -iname "*.jdk" -type d) ]]; then
+echo "Checking for a JDK..."
+if [[ ! -d $(/usr/bin/find "/Library/Java/JavaVirtualMachines" -iname "*.jdk" -type d) ]]; then
 	# Install prerequisite:  Java JDK
 	echo "Installing prerequisite Java JDK from Jamf..."
 	/usr/local/bin/jamf policy -id 721 -forceNoRecon
+else
+	echo "JDK exists...continuing..."
 fi
 
 # Make sure the Installer.bin file is executable
