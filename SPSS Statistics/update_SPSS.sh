@@ -3,7 +3,7 @@
 ###################################################################################################
 # Script Name:  update_SPSS.sh
 # By:  Zack Thompson / Created:  11/22//2017
-# Version:  1.5.1 / Updated:  4/2/2018 / By:  ZT
+# Version:  1.6.0 / Updated:  4/2/2018 / By:  ZT
 #
 # Description:  This script grabs the current location of the SPSSStatistics.app and injects it into the installer.properties file and then will upgrade an SPSS Installation.
 #
@@ -35,6 +35,15 @@ if [[ -z "${appPath}" ]]; then
 	/usr/bin/logger -s "A previous version SPSS was not found in the expected location!"
 	/usr/bin/logger -s "*****  Upgrade SPSS process:  FAILED  *****"
 	exit 1
+fi
+
+echo "Checking for a JDK..."
+if [[ ! -d $(/usr/bin/find "/Library/Java/JavaVirtualMachines" -iname "*.jdk" -type d) ]]; then
+	# Install prerequisite:  Java JDK
+	echo "Installing prerequisite Java JDK from Jamf..."
+	/usr/local/bin/jamf policy -id 721 -forceNoRecon
+else
+	echo "JDK exists...continuing..."
 fi
 
 echo "Upgrading SPSS Version:  ${currentVersion} at path:  ${appPath}"
